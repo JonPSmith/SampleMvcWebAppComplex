@@ -123,14 +123,13 @@
 {
     <script>
         function onSuccess(xhr) {
-
+            notify.showISuccessOrErrors(xhr);
             if (xhr.SuccessMessage) {
-                notify.hideNotify();
-                notify.showSingleMessage(xhr.SuccessMessage, 'success');
+                //If it was a success then update grid
+                var grid = $('#PrimaryKGrid').data("kendoGrid");
+                grid.dataSource.read();
+                grid.refresh();
             };
-            var grid = $('#PrimaryKGrid').data("kendoGrid");
-            grid.dataSource.read();
-            grid.refresh();
         };
 
         function onErrors(xhr) {

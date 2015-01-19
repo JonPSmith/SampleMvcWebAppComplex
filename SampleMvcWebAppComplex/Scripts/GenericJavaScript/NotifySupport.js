@@ -22,6 +22,24 @@ var notify = (function ($, kendo) {
     }).data("kendoNotification");
 
 
+    function localShowSingleMessage(messageString, messageType) {
+        var notifytype = messageType || 'error';
+        if (notifytype === 'error') {
+            stayUpNotifier.show(messageString, notifytype);
+        } else {
+            autoHideNotifier.show(messageString, notifytype);
+        }
+    };
+
+    //this is designed to show the error part of an ISuccessErrors object
+    function showErrorsPart(errorsPart) {
+        for (var error in errorsPart) {
+            var prefix = error === '' ? '' : error + ': ';          //it has named parameter, so include it
+            localShowSingleMessage(prefix + errorsPart[error].errors);
+        }
+    }
+
+
     //public items
 
     return {
@@ -30,13 +48,20 @@ var notify = (function ($, kendo) {
         //The second string holds the possible message types: info, success, warning or error
         //These control the format of the display and how long it is displayed. Defaults to error
         showSingleMessage: function (messageString, messageType) {
-            var notifytype = messageType || 'error';
-            if (notifytype === 'error') {
-                stayUpNotifier.show(messageString, notifytype);
+            localShowSingleMessage(messageString, messageType);
+        },
+        //This expects an object in the format of a ISuccessOrError JSON format
+        showISuccessOrErrors: function (status) {
+            this.hideNotify();
+            if (status.SuccessMessage) {
+                this.showSingleMessage(status.SuccessMessage, 'success');
+            } else if (status.Errors) {
+                showErrorsPart(status.Errors);
             } else {
-                autoHideNotifier.show(messageString, notifytype);
+                this.showSingleMessage("Expected a SuccessMessage, but was not present");
             }
         },
+
         showErrorResponse: function (xhr) {
             this.hideNotify();      //clear preceeding errors
             var json = xhr.responseJSON;
@@ -51,10 +76,7 @@ var notify = (function ($, kendo) {
                     this.showSingleMessage('There was an unknown problem. I could not complete the action.');
                 }
             } else {
-                for (var error in json.Errors) {
-                    var prefix = error === '' ? '' : error + ': ';          //it has named parameter, so include it
-                    this.showSingleMessage(prefix + json.Errors[error].errors);
-                }
+                showErrorsPart(json.Errors);
             }
         },
 

@@ -14,10 +14,12 @@ You can read more about this exercise in two articles I wrote for the
 1. [Using Entity Framework with an Existing Database: Data Access](https://www.simple-talk.com/dotnet/.net-framework/using-entity-framework-with-an-existing-database-data-access/)
 2. [Using Entity Framework with an Existing Database: User Interface](https://www.simple-talk.com/dotnet/asp.net/using-entity-framework-with-an-existing-database--user-interface/)
 
-#### Go to the [example web site](http://complex.samplemvcwebapp.net/) for live demostrations of SampleMvcWebApp - Complex 
+#### Go to the [example web site](http://complex.samplemvcwebapp.net/) for live demostration of SampleMvcWebApp - Complex 
 
-NOTE: if you are new to GenericServices I suggest you start with [SampleMvcWebApp](http://samplemvcwebapp.net/)
-as it explains the basics. However if you want more read on.
+NOTE: if you are new to GenericServices I suggest you start by reading the 
+[second article](https://www.simple-talk.com/dotnet/asp.net/using-entity-framework-with-an-existing-database--user-interface/)
+to get an idea of the architecture and and then go to the [SampleMvcWebApp - Basic](http://samplemvcwebapp.net/)
+as it explains the core setup in more detail. However if you want the more complex stuff the read on.
 
 ### Important information
 
@@ -32,11 +34,10 @@ Look for the 'AdventureWorksLT2012_Data' entry.
 
 While this application is not open-source it does contain a great deal of useful reference material for
 anyone wanting to use [GenericServices](https://github.com/JonPSmith/GenericServices) in a real application.
-It also makes writing the documentation much easier as I have examples to link to.
+It also makes writing, and hopefully reading, of the documentation much easier as I have real examples to link to.
 
 There are a number of usages of GenericServices not seen in the original 
-[SampleMvcWebApp(basic) code](https://github.com/JonPSmith/SampleMvcWebApp) 
-which are useful to see. 
+[SampleMvcWebApp(basic) code](https://github.com/JonPSmith/SampleMvcWebApp). 
 Examples of the GenericServices features found only in this example are:
 
 - Use of [Calculated Properties](https://github.com/JonPSmith/GenericServices/wiki/Calculated-properties)

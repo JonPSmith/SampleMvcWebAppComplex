@@ -59,12 +59,13 @@ namespace SampleMvcWebAppComplex.Controllers
             return View(new TestAjaxFormModel());
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult AjaxFormReturn(TestAjaxFormModel model)
         {
             if (!ModelState.IsValid)
             {
                 //model errors so return errors
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return ModelState.ReturnModelErrorsAsJson();
             }
 
@@ -77,7 +78,6 @@ namespace SampleMvcWebAppComplex.Controllers
             var status = new SuccessOrErrors();
             status.AddSingleError("The ShouldFail flag was set, which causes a service failure.");
             status.AddNamedParameterError("ShouldFail", "This should be false for this to work.");
-            Response.StatusCode = (int)HttpStatusCode.BadRequest;
             return status.ReturnErrorsAsJson(model);
         }
 

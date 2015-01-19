@@ -59,12 +59,7 @@
 {
     <script>
         function onSuccess(xhr) {
-            notify.hideNotify();
-            if (xhr.SuccessMessage) {
-                notify.showSingleMessage(xhr.SuccessMessage, 'success');
-            } else {
-                notify.showSingleMessage("Expected a SuccessMessage, but was not present");
-            }
+            notify.showISuccessOrErrors(xhr);
         };
         function onErrors(xhr, textStatus, exceptionThrown) {
             notify.showErrorResponse(xhr);
