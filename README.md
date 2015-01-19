@@ -29,10 +29,7 @@ However if you want the more complex stuff the read on.
 2. If you clone this application is will NOT run. That is because:
   * I have not included the Kendo UI MVC code because I am not allowed to.
   * I have not included the AdventureWorksLT2012 database:
-
-    - You can pick that up from 
-[here](http://msftdbprodsamples.codeplex.com/releases/view/55330) - 
-Look for the 'AdventureWorksLT2012_Data' entry. 
+    - You can pick that up from [here](http://msftdbprodsamples.codeplex.com/releases/view/55330) - Look for the 'AdventureWorksLT2012_Data' entry. 
     - You will also need to change the connection string in Web.Config file.
 
 ### So why have made the source code available?
