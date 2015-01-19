@@ -19,7 +19,8 @@ You can read more about this exercise in two articles I wrote for the
 NOTE: if you are new to GenericServices I suggest you start by reading the 
 [second article](https://www.simple-talk.com/dotnet/asp.net/using-entity-framework-with-an-existing-database--user-interface/)
 to get an idea of the architecture and and then go to the [SampleMvcWebApp - Basic](http://samplemvcwebapp.net/)
-as it explains the core setup in more detail. However if you want the more complex stuff the read on.
+web application as it explains the core setup of GenericServices in more detail. 
+However if you want the more complex stuff the read on.
 
 ### Important information
 
@@ -27,8 +28,12 @@ as it explains the core setup in more detail. However if you want the more compl
 [Kendo UI MVC](http://docs.telerik.com/kendo-ui/aspnet-mvc/introduction) which I have a developer's licence for.
 2. If you clone this application is will NOT run. That is because:
   * I have not included the Kendo UI MVC code because I am not allowed to.
-  * I have not included the database, but you can pick that up from [here](http://msftdbprodsamples.codeplex.com/releases/view/55330).
-Look for the 'AdventureWorksLT2012_Data' entry.
+  * I have not included the AdventureWorksLT2012 database:
+
+    - You can pick that up from 
+[here](http://msftdbprodsamples.codeplex.com/releases/view/55330) - 
+Look for the 'AdventureWorksLT2012_Data' entry. 
+    - You will also need to change the connection string in Web.Config file.
 
 ### So why have made the source code available?
 
@@ -42,12 +47,12 @@ Examples of the GenericServices features found only in this example are:
 
 - Use of [Calculated Properties](https://github.com/JonPSmith/GenericServices/wiki/Calculated-properties)
 using [DelegateDecompiler](https://github.com/hazzik/DelegateDecompiler).
-- Use of [AutoMapper calculated properties](https://github.com/JonPSmith/GenericServices/wiki/DTO-data-copying#using-automapper-for-calculated-properties).
+- Use of [AutoMapper calculated properties](https://github.com/JonPSmith/GenericServices/wiki/DTO-data-copying#using-automapper-for-calculated-properties)
 for the (few) cases that DelegateDecompiler cannot handle.
 - Various places where the developer needs to overide some of the DTO methods like 
 `FindItemTrackedForUpdate`, `CreateDataFromDto` etc.
 - Using `DeleteAssociatedAddress` to handle the more complex deletion situations.
 - Handling nested DTO copying.
-- Handling updates that include relational data.
+- Handling updates that include related database items.
 - Useful to see the MVC Controllers and Views needed for this sort of application. 
 
