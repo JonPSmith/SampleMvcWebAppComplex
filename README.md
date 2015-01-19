@@ -32,17 +32,16 @@ Look for the 'AdventureWorksLT2012_Data' entry.
 
 While this application is not open-source it does contain a great deal of useful reference material for
 anyone wanting to use [GenericServices](https://github.com/JonPSmith/GenericServices) in a real application.
+It also makes writing the documentation much easier as I have examples to link to.
 
 There are a number of usages of GenericServices not seen in the original 
 [SampleMvcWebApp(basic) code](https://github.com/JonPSmith/SampleMvcWebApp) 
-which are usful to see. Also it makes writing the documentation much easier
-as I have something to refer to. 
-
+which are useful to see. 
 Examples of the GenericServices features found only in this example are:
 
 - Use of [Calculated Properties](https://github.com/JonPSmith/GenericServices/wiki/Calculated-properties)
-using [DelegateDecompiler](https://github.com/hazzik/DelegateDecompiler)
-- Use of [AutoMapper calculated properties](https://github.com/JonPSmith/GenericServices/wiki/DTO-data-copying#using-automapper-for-calculated-properties)
+using [DelegateDecompiler](https://github.com/hazzik/DelegateDecompiler).
+- Use of [AutoMapper calculated properties](https://github.com/JonPSmith/GenericServices/wiki/DTO-data-copying#using-automapper-for-calculated-properties).
 for the (few) cases that DelegateDecompiler cannot handle.
 - Various places where the developer needs to overide some of the DTO methods like 
 `FindItemTrackedForUpdate`, `CreateDataFromDto` etc.
