@@ -1,0 +1,30 @@
+﻿@using DataLayer.GeneratedEf
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Test home page</h2>
+
+<p>
+    This page is just to trying out various items to check they work. Not for normal use:
+</p>
+
+<h4>Test of notify</h4>
+<ul>
+    <li>@Html.ActionLink("Show success message", "NotifySuccess")</li>
+    <li>@Html.ActionLink("Show error single message", "NotifySingleError")</li>
+    <li>@Html.ActionLink("Show error mutiple error message", "NotifyMultipleErrors")</li>
+</ul>
+
+<h4>Test Exception reporting</h4>
+@Html.ActionLink("Throw Exception", "ThrowException")
+
+<h4>Test of Ajax forms</h4>
+@Html.ActionLink("Test Ajax Form", "TestAjaxForm")
+
+
+<h4>Test of Grids</h4>
+<ul>
+    <li>@Html.ActionLink("Show Grid for error testing", "TestGridErrors")</li>
+</ul>

@@ -1,0 +1,92 @@
+﻿@using SampleMvcWebAppComplex.Models
+@model SampleMvcWebAppComplex.Models.ProductListSupportDataModel
+@{
+    ViewBag.Title = "Index";
+}
+<h5 class="text-muted">Special features on this page</h5>
+<ul class="text-muted">
+    <li>Can group column by dragging column to header (try Model column)</li>
+    <li>Detail dropdown: Click arrow at start of grid row</li>
+    <li>Uses foreign key lookup to get text for 'category' column.</li>
+    <li>Auto filters to only show products that are available for sale (based on available form and discontinued from dates)</li>
+    <li>Pre-sorted by product code (user can override)</li>
+    <li>Standard grid page, sort, filter capabilities</li>
+</ul>
+@if (@Model.AvalabilityFilter == ProductListFilters.AvailableForSale)
+{
+    <h2>Products available for sale</h2>
+}
+else
+{
+    <h2>Discontinued or not released products</h2>
+}
+
+@Html.AntiForgeryToken()
+
+@(Html.Kendo().Grid<ServiceLayer.ProductServices.ListProductDto>()
+    .Name("PrimaryKGrid")
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.ProductNumber).Title("#Product");
+        columns.Bound(p => p.Name).Title("Product");
+        columns.ForeignKey(p => p.ProductCategoryIDNonNull, @Model.CategoriesLookup, "Key", "Text").Title("Category").Groupable(false);
+        columns.Bound(p => p.ProductModelName).Title("Model");
+        columns.Bound(p => p.StandardCost).Title("Cost Price").Format("{0:C}");
+        columns.Bound(p => p.ListPrice).Title("List Price").Format("{0:C}");
+
+        //columns.Bound(p => p.ProductID).Title("").ClientTemplate(
+        //    @Html.ActionLink("Detail", "Details", new { id = "#=ProductID#" }, new { @class = "k-button" }).ToHtmlString() + " " +
+        //    @Html.ActionLink("Edit", "Edit", new { id = "#=ProductID#" }, new { @class = "k-button" }).ToHtmlString()).Filterable(false).Sortable(false).Width(160);
+        //columns.Command(x => x.Destroy()).Width(100);
+    })
+    .Pageable(x => x.PageSizes(new int[] { 10, 20, 50, 100 }))
+    .Sortable()
+    .Filterable()
+    .Groupable()
+    .ClientDetailTemplateId("detail-template")
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Model(model => model.Id(p => p.ProductID))
+        .PageSize(10)
+        .Events(events =>
+        {
+            events.Error("grids.errorHandler");
+            events.RequestStart("grids.requestStart");
+            events.RequestEnd("grids.requestEnd");
+        })
+        .Sort(x => x.Add(y => y.ProductNumber))
+        .Filter(filters =>
+        {
+            if (@Model.AvalabilityFilter == ProductListFilters.AvailableForSale)
+            {
+                filters.Add(c => c.IsOnSale).IsEqualTo(true);
+            }
+            else
+            {
+                filters.Add(c => c.IsOnSale).IsEqualTo(false);
+            }
+        })
+        .Read(read => read.Action("IndexListRead", "Products"))
+        .Destroy(x => x.Action("CustomerDelete", "Products").Type(HttpVerbs.Post).Data("grids.sendAntiForgery"))
+        )
+        //.Events(events => events.DataBound("grids.dataBound"))        //only add this if you want the detail to open at start
+)
+
+<script id="detail-template" type="text/x-kendo-template">
+    <div>
+        <ul>
+            <li><label>Product: </label>#= Name #</li>
+            <li><label>Color:</label># if (Color == null) { '' }else{# #= Color # #}#</li>
+            <li><label>Size:</label># if (Size == null) { '' }else{# #= Size # #}#</li>
+            <li><label>Available from:</label>#= $.format.date( SellStartDate, "dd/MM/yyyy") #</li>
+        </ul>
+    </div>
+</script>
+
+<script type="text/kendo-template" id="message">
+    <div class="k-widget k-tooltip k-tooltip-validation k-invalid-msg field-validation-error" style="margin: 0.5em; display: block; " data-for="#=field#" data-valmsg-for="#=field#" id="#=field#_validationMessage">
+        <span class="k-icon k-warning"> </span>#=message#<div class="k-callout k-callout-n"></div>
+    </div>
+</script>
+
+

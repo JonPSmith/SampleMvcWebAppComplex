@@ -1,0 +1,78 @@
+﻿@using GenericLibsBase
+@using ServiceLayer.OrdersServices
+@model SalesOrderHeaderStatuses
+@{
+    ViewBag.Title = "Index";
+}
+<h5 class="text-muted">Special features on this page</h5>
+<ul class="text-muted">
+    <li>Pre-sorted by PO number (user can override)</li>
+    <li>State column uses value lookup to show string for Status int values</li>
+    <li>Features controlled by order status, i.e. can only delete/add line items to 'in-progress' orders</li>
+    <li>Standard grid page, sort, filter capabilities</li>
+    <li>Confirmation message on create or edit</li>
+</ul> 
+@{
+    var lookup = ListSalesOrderDto.StatusNameLookup();
+}
+
+<h2>@Model.ToString().SplitCamelCase() Orders</h2>
+
+@Html.AntiForgeryToken()
+
+@(Html.Kendo().Grid<ListSalesOrderDto>()
+    .Name("PrimaryKGrid")
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.SalesOrderNumber).Title("#").Width(70);
+        columns.Bound(p => p.OrderDate).Format("{0:MM/dd/yyyy}").Width(140);
+        columns.ForeignKey(p => p.Status, lookup, "Key", "Value").Title("State").Width(90);
+        columns.Bound(p => p.OnlineOrderFlag).Title("Web").Width(90);
+        columns.Bound(p => p.CustomerCompanyName);
+        columns.Bound(p => p.TotalDue).Format("{0:C}").Title("Order Value").Width(140);
+        if (@Model == SalesOrderHeaderStatuses.InProgress)
+        {
+            //If in progress we can edit the line items
+            columns.Bound(p => p.SalesOrderID).Title("").ClientTemplate(
+                @Html.ActionLink("Detail", "Details", new { id = "#=SalesOrderID#" }, new { @class = "k-button" }).ToHtmlString() + " " +
+                @Html.ActionLink("Edit Items", "EditLineItems", new {salesOrderID = "#=SalesOrderID#"}, new {@class = "k-button"}).ToHtmlString()
+            ).Filterable(false).Sortable(false).Width(180);
+        }
+        else
+        {         
+            columns.Bound(p => p.SalesOrderID).Title("").ClientTemplate(
+                @Html.ActionLink("Detail", "Details", new { id = "#=SalesOrderID#" }, new { @class = "k-button" }).ToHtmlString() + " " +
+                @Html.ActionLink("Edit", "Edit", new {id = "#=SalesOrderID#"}, new {@class = "k-button"}).ToHtmlString()
+            ).Filterable(false).Sortable(false).Width(160);
+        }
+        if (@Model == SalesOrderHeaderStatuses.InProgress)
+        {
+            //We only allow in progress sales orders to be deleted
+            columns.Command(x => x.Destroy()).Width(100);
+        }
+    })
+    .Pageable( x => x.PageSizes(new int[] {10,20,50,100}))
+    .Sortable()
+    .Filterable()
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Model(model => model.Id(p => p.SalesOrderID))
+        .PageSize(10)
+        .Events(events =>
+            {
+                events.Error("grids.errorHandler");
+                events.RequestStart("grids.requestStart");
+                events.RequestEnd("grids.requestEnd");
+            })
+        .Filter(filters =>filters.Add(c => c.Status).IsEqualTo((byte)@Model))
+        .Sort(x => x.Add(y => y.SalesOrderNumber))
+        .Read(read => read.Action("IndexListRead", "Orders"))
+        .Destroy(x => x.Action("DeleteSalesOrder", "Orders").Type(HttpVerbs.Post).Data("grids.sendAntiForgery"))
+     )
+  )
+
+<script type="text/kendo-template" id="message">
+    <div class="k-widget k-tooltip k-tooltip-validation k-invalid-msg field-validation-error" style="margin: 0.5em; display: block; " data-for="#=field#" data-valmsg-for="#=field#" id="#=field#_validationMessage">
+        <span class="k-icon k-warning"> </span>#=message#<div class="k-callout k-callout-n"></div>
+    </div>
+</script>

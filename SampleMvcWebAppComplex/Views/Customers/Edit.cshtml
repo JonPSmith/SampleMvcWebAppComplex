@@ -1,0 +1,143 @@
+﻿@model ServiceLayer.CustomerServices.CrudCustomerDto
+
+@{
+    ViewBag.Title = "Edit";
+}
+<h5 class="text-muted">Special features on this page</h5>
+<ul class="text-muted">
+    <li>A simple list for the addresses at the end (can be none)</li>
+    <li>Confirmation message on edit</li>
+</ul> 
+<h2>Edit</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Customer</h4>
+
+        <hr />
+
+        @Html.HiddenFor(model => model.CustomerID)
+        @Html.HiddenFor(model => model.HasBoughtBefore)
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MiddleName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.MiddleName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.MiddleName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Suffix, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Suffix, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Suffix, "", new { @class = "text-danger" })
+            </div>      
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CompanyName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CompanyName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.EmailAddress, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.EmailAddress, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.EmailAddress, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<!-- This part comes outside the form as we do not send this data back on an edit. Editing addresses is a separate part-->
+@Html.ActionLink("New Address", "AddAddress", new { customerId = Model.CustomerID }, new { @class = "btn btn-default" })
+<table class="table">
+    <tr>
+        <th>
+
+        </th>
+        <th>
+            Address Type
+        </th>
+        <th>
+            Full Address
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.CustomerAddresses)
+    {
+        <tr>
+            <td>
+                @Html.HiddenFor(modelItem => item.AddressID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AddressType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AddressFullAddress)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "EditAddress", new { customerId = Model.CustomerID, addressId = item.AddressID }, new { @class = "btn btn-default" }) 
+                @Html.ActionLink("Delete", "DeleteAddress", new { customerId = Model.CustomerID, addressId = item.AddressID }, new { @class = "btn btn-default" })
+            </td>
+        </tr>
+    }
+</table>
+
+
+
+<div>
+    @Html.ActionLink("Back to List", Model.HasBoughtBefore ? "Index" : "NotCustomers")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

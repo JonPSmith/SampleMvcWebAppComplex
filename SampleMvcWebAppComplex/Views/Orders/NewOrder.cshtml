@@ -1,0 +1,76 @@
+﻿@model ServiceLayer.OrdersServices.NewOrderDto
+
+@{
+    ViewBag.Title = "NewOrder";
+}
+<h5 class="text-muted">Special features on this page</h5>
+<ul class="text-muted">
+    <li>Handles two stage creation of a new order. This page sets up customer part.</li>
+    <li>On pressing Start Order button it goes to Edit/Add Line items</li>
+    <li>Confirmation message on create</li>
+</ul> 
+<h2>New Order - Part1</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Select Customer</label>
+            <div class="col-md-10">
+                @(Html.Kendo().DropDownList()
+                    .Name("CustomerId")
+                    .DataTextField("CompanyName")
+                    .DataValueField("CustomerID")
+                    .HtmlAttributes(new { style = "width:300px" })
+                    .Filter(FilterType.Contains)
+                    .DataSource(source => source.Read(read => read.Action("GetCompanies", "Customers")).ServerFiltering(true)))
+            </div>
+        </div>
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.PurchaseOrderNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.PurchaseOrderNumber, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PurchaseOrderNumber, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AccountNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.AccountNumber, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.AccountNumber, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.DueDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @(Html.Kendo().DatePicker()
+                      .Name("DueDate")
+                      .Value(Model.DueDate)
+                      .HtmlAttributes(new {style = "width:150px"}))
+                @Html.ValidationMessageFor(model => model.DueDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.ShipMethod, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ShipMethod, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ShipMethod, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Start Order" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+

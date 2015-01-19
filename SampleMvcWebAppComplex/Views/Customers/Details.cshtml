@@ -1,0 +1,115 @@
+﻿@model ServiceLayer.CustomerServices.CrudCustomerDto
+
+@{
+    ViewBag.Title = "Details";
+}
+<h5 class="text-muted">Special features on this page</h5>
+<ul class="text-muted">
+    <li>A simple list for the addresses at the end (can be none)</li>
+</ul> 
+
+<h2>Details</h2>
+
+<div>
+    <h4>CrudCustomerDto</h4>
+    <hr />
+    <dl class="dl-horizontal">
+
+        @Html.HiddenFor(model => model.CustomerID)
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MiddleName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MiddleName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Suffix)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Suffix)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CompanyName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CompanyName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EmailAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EmailAddress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Phone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Phone)
+        </dd>
+
+    </dl>
+    <table class="table">
+        <tr>
+            <th></th>
+            <th>
+                Address Type
+            </th>
+            <th>
+                Full Address
+            </th>
+        </tr>
+
+        @foreach (var item in Model.CustomerAddresses)
+        {
+            <tr>
+                <td>
+                    @Html.HiddenFor(modelItem => item.AddressID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AddressType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AddressFullAddress)
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = @Model.CustomerID  }) |
+    @Html.ActionLink("Back to List", Model.HasBoughtBefore ? "Index" : "NotCustomers")
+</p>

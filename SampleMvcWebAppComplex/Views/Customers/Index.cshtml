@@ -1,0 +1,80 @@
+﻿@model bool
+@{
+    ViewBag.Title = "Index";
+}
+
+<h5 class="text-muted">Special features on this page</h5>
+<ul class="text-muted">
+    <li>Pre-filtered to current/potential customers</li>
+    <li>Standard grid page, sort, filter capabilities</li>
+    <li>Confirmation message on create, edit, delete</li>
+</ul>   
+
+@if (@Model)
+{
+    <h2>Current customers</h2>
+}
+else
+{
+    <h2>Contacts that have not bought from us yet</h2>
+}
+@Html.AntiForgeryToken()        
+
+@(Html.Kendo().Grid<ServiceLayer.CustomerServices.ListCustomerDto>()
+    .Name("PrimaryKGrid")
+    .ToolBar(toolbar =>
+            {
+                toolbar.Template(@<text>
+                    <div class="toolbar">
+                        @Html.ActionLink("Create new Customer", "Create", null, new { @class = "k-button" })
+                    </div>
+                </text>);
+
+            })
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.CompanyName);
+        columns.Bound(p => p.FullName).Title("Contact Name");
+        if (Model)
+        {
+            columns.Bound(p => p.TotalAllOrders).Format("{0:C}").Title("Total Sales Value");
+        }
+        columns.Bound(p => p.CustomerID).Title("").ClientTemplate(
+            @Html.ActionLink("Detail", "Details", new { id = "#=CustomerID#" }, new { @class = "k-button"}).ToHtmlString() + " " +
+            @Html.ActionLink("Edit", "Edit", new { id = "#=CustomerID#" }, new { @class = "k-button" }).ToHtmlString()).Filterable(false).Sortable(false).Width(160);
+        columns.Command(x => x.Destroy()).Width(100);
+    })
+    .Pageable(x => x.PageSizes(new int[] { 10, 20, 50, 100 }))
+    .Sortable()
+    .Filterable()
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Model(model => model.Id(p => p.CustomerID))
+        .PageSize(10)
+        .Events(events =>
+        {
+            events.Error("grids.errorHandler");
+            events.RequestStart("grids.requestStart");
+            events.RequestEnd("grids.requestEnd");
+        })
+        .Filter(filters =>
+        {
+            if (Model)
+            {
+                filters.Add(c => c.HasBoughtBefore).IsEqualTo(true);
+            }
+            else
+            {
+                filters.Add(c => c.HasBoughtBefore).IsEqualTo(false);
+            }
+        })
+        .Read(read => read.Action("IndexListRead", "Customers"))
+        .Destroy(x => x.Action("CustomerDelete", "Customers").Type(HttpVerbs.Post).Data("grids.sendAntiForgery"))
+     )
+      )
+
+<script type="text/kendo-template" id="message">
+    <div class="k-widget k-tooltip k-tooltip-validation k-invalid-msg field-validation-error" style="margin: 0.5em; display: block; " data-for="#=field#" data-valmsg-for="#=field#" id="#=field#_validationMessage">
+        <span class="k-icon k-warning"> </span>#=message#<div class="k-callout k-callout-n"></div>
+    </div>
+</script>

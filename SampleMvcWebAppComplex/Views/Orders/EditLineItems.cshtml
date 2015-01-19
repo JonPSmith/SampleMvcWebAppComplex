@@ -1,0 +1,148 @@
+﻿@model ServiceLayer.OrdersServices.CreateLineItemDto
+
+@{
+    ViewBag.Title = "NewOrderPart2";
+}
+<h5 class="text-muted">Special features on this page</h5>
+<ul class="text-muted">
+    <li>Select Product dropdown supports server side search</li>
+    <li>Grid shows summed total</li>
+</ul> 
+<h2>Order: add/edit line items</h2>
+
+ 
+@using (Ajax.BeginForm("AjaxAddLineItem", new AjaxOptions { OnSuccess = "onSuccess", OnFailure = "onErrors"}))
+{
+
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(model => model.SalesOrderID)
+    @Html.HiddenFor(model => model.CustomerID)
+    
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new {@class = "text-danger"})
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.SalesOrderNumber, htmlAttributes: new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.SalesOrderNumber, new {htmlAttributes = new {@class = "form-control"}})
+            </div>
+        </div>
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.CustomerCompanyName, htmlAttributes: new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.CustomerCompanyName, new {htmlAttributes = new {@class = "form-control"}})
+            </div>
+        </div>
+
+        <fieldset>
+            <h3>Add new line item</h3>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">Select Product</label>
+                <div class="col-md-10">
+                    @(Html.Kendo().DropDownList()
+                          .Name("ProductId")
+                          .DataTextField("Text")
+                          .DataValueField("Key")
+                          .HtmlAttributes(new {style = "width:400px"})
+                          .Filter(FilterType.Contains)
+                          .DataSource(source => source.Read(read => read.Action("GetProducts", "Products")).ServerFiltering(true)))
+                </div>
+            </div>
+        
+            <div class="form-group">
+                <label class="control-label col-md-2">Quantity</label>
+                <div class="col-md-10">
+                    @(Html.Kendo().NumericTextBox().Name("OrderQty").Value(1))
+                </div>
+            </div>
+        
+        </fieldset>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Add Product" class="k-button" />
+            </div>
+        </div>
+
+    </div>
+}   
+
+@Html.ActionLink("Finished", "Pending", null, new { @class = "k-button" })
+<h3>Line Items</h3>
+
+@(Html.Kendo().Grid<ServiceLayer.OrdersServices.CrudSalesOrderDetailDto>()
+            .Name("PrimaryKGrid")
+        .Columns(columns =>
+        {
+            columns.Bound(p => p.SalesOrderDetailID).Hidden();
+            columns.Bound(p => p.ProductName).Title("Product Name");
+            columns.Bound(p => p.OrderQty).Title("#Ordered").Width(130).ClientFooterTemplate("<div>Items: #= sum #</div>");
+            columns.Bound(p => p.UnitPrice).Title("Unit Price").Width(130);
+            columns.Bound(p => p.UnitPriceDiscount).Title("Discount Price").Width(160);
+            columns.Bound(p => p.LineTotal).Title("Line Total").ClientFooterTemplate("<div>Total: $#= sum #</div>");
+            columns.Command(x => {x.Edit(); x.Destroy();});
+        })
+        .Pageable(x => x.PageSizes(new int[] { 10, 20, 50, 100 }))
+        .Sortable()
+        .Editable(editable => editable.Mode(GridEditMode.InLine))
+        .Filterable()
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .Model(model =>
+            {
+                model.Id(x => x.SalesOrderDetailID);
+                model.Field(x => x.ProductName).Editable(false);
+                model.Field(x => x.UnitPrice).Editable(false);
+                model.Field(x => x.UnitPriceDiscount).Editable(false);
+                model.Field(x => x.LineTotal).Editable(false);
+            })
+            .Aggregates(x =>
+            {
+                x.Add(p => p.OrderQty).Sum();
+                x.Add(p => p.LineTotal).Sum();               
+            })
+            .PageSize(10)
+            .Events(events =>
+            {
+                events.Error("grids.errorHandler");
+                events.RequestStart("grids.requestStart");
+                events.RequestEnd("grids.requestEnd");
+            })
+            .Read(read => read.Action("ReadLineItems", "Orders", new { salesOrderId = @Model.SalesOrderID }))
+            .Update(x => x.Action("UpdateLineItem", "Orders").Type(HttpVerbs.Post).Data("grids.sendAntiForgery"))
+            .Destroy(x => x.Action("DeleteLineItem", "Orders").Type(HttpVerbs.Post).Data("grids.sendAntiForgery"))
+            )
+)
+
+
+@section scripts
+{
+    <script>
+        function onSuccess(xhr) {
+
+            if (xhr.SuccessMessage) {
+                notify.hideNotify();
+                notify.showSingleMessage(xhr.SuccessMessage, 'success');
+            };
+            var grid = $('#PrimaryKGrid').data("kendoGrid");
+            grid.dataSource.read();
+            grid.refresh();
+        };
+
+        function onErrors(xhr) {
+            notify.showErrorResponse(xhr);
+        };
+
+        $(document).ready(function() {
+            //we add a extra fucntion to the requestEnd of the grid
+            grids.addExtraActionAtEndOfNonRead(function(e, grid) {
+                grid.dataSource.read();
+            });
+        });
+
+    </script>
+}

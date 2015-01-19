@@ -1,0 +1,209 @@
+﻿@model ServiceLayer.OrdersServices.CrudSalesOrderDto
+
+@{
+    ViewBag.Title = "Details";
+}
+<h5 class="text-muted">Special features on this page</h5>
+<ul class="text-muted">
+    <li>Embedded list at end of page to handle line items</li>
+</ul> 
+<h2>Order Details</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        @Html.HiddenFor(model => model.SalesOrderID)
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RevisionNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RevisionNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrderDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DueDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DueDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ShipDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ShipDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EnumStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EnumStatus)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OnlineOrderFlag)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OnlineOrderFlag)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SalesOrderNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SalesOrderNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PurchaseOrderNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PurchaseOrderNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AccountNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AccountNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ShipMethod)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ShipMethod)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreditCardApprovalCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreditCardApprovalCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SubTotal)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SubTotal)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TaxAmt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TaxAmt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Freight)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Freight)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TotalDue)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TotalDue)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Comment)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Comment)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerFullName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomerFullName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerCompanyName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomerCompanyName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AddressFullAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AddressFullAddress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Address1FullAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Address1FullAddress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ModifiedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ModifiedDate)
+        </dd>
+        
+    </dl>
+    <h3>Line Items</h3>
+
+    @(Html.Kendo().Grid(Model.SalesOrderDetails)
+            .Name("Grid")
+            .Columns(columns =>
+            {
+                columns.Bound(p => p.ProductName).Title("Product Name");
+                columns.Bound(p => p.OrderQty).Title("#Ordered").Width(130);
+                columns.Bound(p => p.UnitPrice).Title("Unit Price").Width(130);
+                columns.Bound(p => p.UnitPriceDiscount).Title("Discount Price").Width(160);
+                columns.Bound(p => p.LineTotal).Title("Line Total");
+            })
+            .Sortable()
+            .Filterable()
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .ServerOperation(false)
+             )
+    )
+</div>
+<p>
+    @Html.ActionLink("Edit", "EditLIneItems", new { salesOrderId = Model.SalesOrderID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

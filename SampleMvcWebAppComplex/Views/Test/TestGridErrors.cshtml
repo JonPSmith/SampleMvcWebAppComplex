@@ -1,0 +1,55 @@
+﻿@using DataLayer.GeneratedEf
+
+@{
+    ViewBag.Title = "TestGridErrors";
+}
+
+<h2>Test Grid Errors</h2>
+
+<p>This tests the Kendo grid against different exceptions and authorisation errors</p>
+<ul>
+    <li>Create: This returns a general error</li>
+    <li>Edit: This throws a authorisation error</li>
+    <li>Delete: This throws an exception.</li>
+    <li>Test Action: This should produce a success message with the id of the select row</li>
+</ul>
+@Html.AntiForgeryToken()
+
+@(Html.Kendo().Grid<ProductDescription>()
+    .Name("PrimaryKGrid")
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.ProductDescriptionID).Title("Id");
+        columns.Bound(p => p.Description);
+        columns.Bound(p => p).ClientTemplate(
+            @Html.ActionLink("Test Action", "TestGridErrorAction", new { id = "#=ProductDescriptionID#" }, new { @class = "k-button" }).ToHtmlString())
+            .Filterable(false).Sortable(false).Width(110);
+        columns.Command(command => { command.Edit(); command.Destroy(); }).Width(172);
+    })
+    .ToolBar(toolbar => toolbar.Create())
+    .Sortable()
+    .Filterable()
+    .Pageable()
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Model(model => model.Id(p => p.ProductDescriptionID))
+        .PageSize(10)
+        .Events(events =>
+            {
+                events.Error("grids.errorHandler");
+                events.RequestStart("grids.requestStart");
+                events.RequestEnd("grids.requestEnd");
+            })
+            .Read(read => read.Action("AjaxProductDescriptionRead", "Test"))
+            .Create(x => x.Action("AjaxGridGeneralError", "Test").Type(HttpVerbs.Post).Data("grids.sendAntiForgery"))
+        .Update(x => x.Action("AjaxPostNotAuthorized", "Test").Type(HttpVerbs.Post).Data("grids.sendAntiForgery"))
+        .Destroy(x => x.Action("AjaxPostExceptionTest", "Test").Type(HttpVerbs.Post).Data("grids.sendAntiForgery"))
+     )
+)
+
+<script type="text/kendo-template" id="message">
+    <div class="k-widget k-tooltip k-tooltip-validation k-invalid-msg field-validation-error" style="margin: 0.5em; display: block; " data-for="#=field#" data-valmsg-for="#=field#" id="#=field#_validationMessage">
+        <span class="k-icon k-warning"> </span>#=message#<div class="k-callout k-callout-n"></div>
+    </div>
+</script>
+

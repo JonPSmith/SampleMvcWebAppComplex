@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    <!--This bundle was moved by the Telerik VS Extensions for compatibility reasons-->
+    @Scripts.Render("~/bundles/jquery")
+    <link href="http://cdn.kendostatic.com/2014.3.1119/styles/kendo.common.min.css" rel="stylesheet" type="text/css" />
+    <link href="http://cdn.kendostatic.com/2014.3.1119/styles/kendo.mobile.all.min.css" rel="stylesheet" type="text/css" />
+    <link href="http://cdn.kendostatic.com/2014.3.1119/styles/kendo.dataviz.min.css" rel="stylesheet" type="text/css" />
+    <link href="http://cdn.kendostatic.com/2014.3.1119/styles/kendo.default.min.css" rel="stylesheet" type="text/css" />
+    <link href="http://cdn.kendostatic.com/2014.3.1119/styles/kendo.dataviz.default.min.css" rel="stylesheet" type="text/css" />
+    @*<script src="http://cdn.kendostatic.com/2014.3.1119/js/jquery.min.js"></script>*@
+    <script src="http://cdn.kendostatic.com/2014.3.1119/js/jszip.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2014.3.1119/js/kendo.all.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2014.3.1119/js/kendo.aspnetmvc.min.js"></script>
+    <script src="@Url.Content("~/Scripts/kendo.modernizr.custom.js")"></script>
+</head>
+<body>
+    <!-- This menu is normally produced by a propriatory library called GenericMenus -->
+    <div>
+        <ul id="mainmenu" class="navbar-fixed-top hidden">
+            <li><a href="/">Home</a></li>
+            <li>
+                Customers<ul>
+                    <li><a href="/Customers">Current Customers</a></li>
+                    <li><a href="/Customers/NotCustomers">Potential Customers</a></li>
+                    <li><a href="/Customers/Create">New Customer</a></li>
+                </ul>
+            </li>
+            <li>
+                Orders<ul>
+                    <li><a href="/Orders">Shipped Orders</a></li>
+                    <li><a href="/Orders/Pending">Pending Orders</a></li>
+                    <li><a href="/Orders/NewOrder">New Order</a></li>
+                </ul>
+            </li>
+            <li><a href="/Products">Products</a></li>
+            <li><a href="/Home/About">About</a></li>
+            <li><a href="/Home/Contact">Contact</a></li>
+            <li><a href="/Test">Test</a></li>
+        </ul>
+    </div>
+
+    <div class="container body-content">
+        <div id="put-notify-here"></div>
+        <span id="notify-span"></span>            @*used to hold the notify messages. See NotifySupport.js file*@
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year Selective Analytics</p>
+        </footer>
+    </div>
+
+
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/GenericJavaScript")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        $("#mainmenu").kendoMenu();
+        $("#mainmenu").removeClass("hidden");
+        $().tooltip({ trigger: 'hover focus manual' });
+
+        @if (@TempData["message"] != null) {
+            @: notify.showSingleMessage('@TempData["message"]', 'success');
+                }
+        @if (@TempData["errorMessage"] != null) {
+            foreach (var line in ((string)TempData["errorMessage"]).Split('\n'))
+            {
+                @: notify.showSingleMessage('@line');
+                    }
+        }
+    });
+</script>
