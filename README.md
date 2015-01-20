@@ -36,7 +36,8 @@ However if you want the more complex stuff the read on.
 
 While this application is not open-source it does contain a great deal of useful reference material for
 anyone wanting to use [GenericServices](https://github.com/JonPSmith/GenericServices) in a real application.
-It also makes writing, and hopefully reading, of the documentation much easier as I have real examples to link to.
+It also makes writing, and hopefully the understanding, of the documentation much easier as 
+it can point to working example code.
 
 There are a number of usages of GenericServices not seen in the original 
 [SampleMvcWebApp(basic) code](https://github.com/JonPSmith/SampleMvcWebApp). 

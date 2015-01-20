@@ -48,6 +48,7 @@ namespace ServiceLayer.CustomerServices
         }
 
         //The code below shows how to override ListQueryUntracked to achive what DelegateDecompiler and AutoMapper do automatically 
+        //As you can see its not that hard, but if you needed to do this for every DTO it gets pertty boring!
 
         //protected override IQueryable<ListCustomerDto> ListQueryUntracked(IGenericServicesDbContext context)
         //{
@@ -57,13 +58,13 @@ namespace ServiceLayer.CustomerServices
         //        CompanyName = x.CompanyName,
         //        FullName = x.Title + (x.Title == null ? "" : " ") + x.FirstName + " " + x.LastName + " " + x.Suffix,
         //        HasBoughtBefore = x.SalesOrderHeaders.Any(),
-        //        TotalAllOrders = x.SalesOrderHeaders.Sum(y => (decimal?) y.TotalDue) ?? 0
+        //        TotalAllOrders = SalesOrderHeaders.Any() ? SalesOrderHeaders.Sum(x => x.TotalDue) : 0
         //    });
         //}
 
         //If you have read the article https://www.simple-talk.com/dotnet/asp.net/using-entity-framework-with-an-existing-database--user-interface/
         //Then the code below is what I used to use to fill in TotalAllOrders before DelegateDecopiler was updated.
-        //Note: later in the same article a look at the resulting SQL produced caused me to change the calculation. Have a look at Customer.cs in DataLayer
+        //Note: later in the same article a look at the resulting SQL produced which caused me to change the calculation. Have a look at Customer.cs in DataLayer
 
         //protected override Action<IMappingExpression<Customer, ListCustomerDto>> AddedDatabaseToDtoMapping
         //{

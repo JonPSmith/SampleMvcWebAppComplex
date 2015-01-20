@@ -137,7 +137,6 @@ namespace SampleMvcWebAppComplex.Controllers
             if (!ModelState.IsValid)
             {
                 //model errors so return errors
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return ModelState.ReturnModelErrorsAsJson();
             }
 
@@ -148,7 +147,6 @@ namespace SampleMvcWebAppComplex.Controllers
             }
 
             //else errors, so send back the errors
-            Response.StatusCode = (int)HttpStatusCode.BadRequest;
             return response.ReturnErrorsAsJson(newOrder);
         }
 

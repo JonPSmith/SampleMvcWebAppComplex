@@ -148,7 +148,7 @@ namespace ServiceLayer.OrdersServices
             get { return typeof(CrudSalesOrderDetailDto); }
         }
 
-        //Need to force Decompile as accesses CustomerFullName
+        //Need to force Decompile as accesses Customer.FullName, which GenericServices does not spot
         public override bool ForceNeedDecompile
         {
             get { return true; }
