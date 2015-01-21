@@ -56,8 +56,9 @@
     <Reference Include="GenericLibsBase">
       <HintPath>..\packages\GenericLibsBase.1.0.0\lib\GenericLibsBase.dll</HintPath>
     </Reference>
-    <Reference Include="GenericServices">
-      <HintPath>..\packages\GenericServices.1.0.1\lib\GenericServices.dll</HintPath>
+    <Reference Include="GenericServices, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\GenericServices.1.0.2\lib\GenericServices.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>

@@ -27,7 +27,7 @@
         columns.Bound(p => p.SalesOrderNumber).Title("#").Width(70);
         columns.Bound(p => p.OrderDate).Format("{0:MM/dd/yyyy}").Width(140);
         columns.ForeignKey(p => p.Status, lookup, "Key", "Value").Title("State").Width(90);
-        columns.Bound(p => p.OnlineOrderFlag).Title("Web").Width(90);
+        //columns.Bound(p => p.OnlineOrderFlag).Title("Web").Width(90);
         columns.Bound(p => p.CustomerCompanyName);
         columns.Bound(p => p.TotalDue).Format("{0:C}").Title("Order Value").Width(140);
         if (@Model == SalesOrderHeaderStatuses.InProgress)
