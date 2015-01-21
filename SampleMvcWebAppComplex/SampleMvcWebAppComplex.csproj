@@ -243,6 +243,8 @@
     <Content Include="Views\Test\Index.cshtml" />
     <Content Include="Views\Test\TestAjaxForm.cshtml" />
     <Content Include="Views\Test\TestGridErrors.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DropDownListType.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\MultiSelectListType.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
