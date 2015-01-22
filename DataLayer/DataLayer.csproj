@@ -88,6 +88,7 @@
     <Compile Include="GeneratedEFExtensions\SalesOrderHeader.cs" />
     <Compile Include="GeneratedEf\Address.cs" />
     <Compile Include="GeneratedEf\AdventureWorksLt2012.cs" />
+    <Compile Include="GeneratedEf\AdventureWorksLt2012.Views.cs" />
     <Compile Include="GeneratedEf\Customer.cs" />
     <Compile Include="GeneratedEf\CustomerAddress.cs" />
     <Compile Include="GeneratedEf\Product.cs" />
