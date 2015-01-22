@@ -74,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\DataLayerModule.cs" />
+    <Compile Include="App_Start\EfConfiguration.cs" />
     <Compile Include="GeneratedEFExtensions\Address.cs" />
     <Compile Include="GeneratedEFExtensions\AdventureWorksLt2012.cs" />
     <Compile Include="GeneratedEFExtensions\Customer.cs" />
