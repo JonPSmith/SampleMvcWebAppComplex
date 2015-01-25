@@ -107,10 +107,10 @@ namespace ServiceLayer.OrdersServices
         public string CustomerCompanyName { get; set; }
 
         [Display(Name = "Ship To Address")]
-        public string AddressFullAddress { get; set; }
+        public string Address1FullAddress { get; set; }
 
         [Display(Name = "Bill To Address")]
-        public string Address1FullAddress { get; set; }
+        public string AddressFullAddress { get; set; }
 
         [Display(Name = "Last updated")]
         [DataType(DataType.Date)]
@@ -213,7 +213,7 @@ namespace ServiceLayer.OrdersServices
                 ? shipToAddressId
                 : null;             //could do more error checking here, but we fail safe if any error
 
-            var billToAddressId = dto.ShipToOptions.SelectedValueAsInt;
+            var billToAddressId = dto.BillToOptions.SelectedValueAsInt;
             dto.BillToAddressID = billToAddressId != null &&
                                   db.Set<CustomerAddress>()
                                       .SingleOrDefault(
