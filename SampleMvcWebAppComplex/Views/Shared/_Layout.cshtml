@@ -1,23 +1,40 @@
 ﻿<!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
-    @Styles.Render("~/Content/css")
-    <!--This bundle was moved by the Telerik VS Extensions for compatibility reasons-->
-    @Scripts.Render("~/bundles/jquery")
-    <link href="http://cdn.kendostatic.com/2014.3.1119/styles/kendo.common.min.css" rel="stylesheet" type="text/css" />
-    <link href="http://cdn.kendostatic.com/2014.3.1119/styles/kendo.mobile.all.min.css" rel="stylesheet" type="text/css" />
-    <link href="http://cdn.kendostatic.com/2014.3.1119/styles/kendo.dataviz.min.css" rel="stylesheet" type="text/css" />
-    <link href="http://cdn.kendostatic.com/2014.3.1119/styles/kendo.default.min.css" rel="stylesheet" type="text/css" />
-    <link href="http://cdn.kendostatic.com/2014.3.1119/styles/kendo.dataviz.default.min.css" rel="stylesheet" type="text/css" />
-    @*<script src="http://cdn.kendostatic.com/2014.3.1119/js/jquery.min.js"></script>*@
-    <script src="http://cdn.kendostatic.com/2014.3.1119/js/jszip.min.js"></script>
-    <script src="http://cdn.kendostatic.com/2014.3.1119/js/kendo.all.min.js"></script>
-    <script src="http://cdn.kendostatic.com/2014.3.1119/js/kendo.aspnetmvc.min.js"></script>
-    <script src="@Url.Content("~/Scripts/kendo.modernizr.custom.js")"></script>
-</head>
+    <head>
+        <!--
+    To collect end-user usage analytics about your application,
+    insert the following script into each page you want to track.
+    Place this code immediately before the closing </head> tag,
+    and before any other scripts. Your first data will appear
+    automatically in just a few seconds.
+    -->
+        <script type="text/javascript">
+            var appInsights = window.appInsights || function (config) {
+                function s(config) { t[config] = function () { var i = arguments; t.queue.push(function () { t[config].apply(t, i) }) } } var t = { config: config }, r = document, f = window, e = "script", o = r.createElement(e), i, u; for (o.src = config.url || "//az416426.vo.msecnd.net/scripts/a/ai.0.js", r.getElementsByTagName(e)[0].parentNode.appendChild(o), t.cookie = r.cookie, t.queue = [], i = ["Event", "Exception", "Metric", "PageView", "Trace"]; i.length;) s("track" + i.pop()); return config.disableExceptionTracking || (i = "onerror", s("_" + i), u = f[i], f[i] = function (config, r, f, e, o) { var s = u && u(config, r, f, e, o); return s !== !0 && t["_" + i](config, r, f, e, o), s }), t
+            }({
+                instrumentationKey: "a1817c37-f529-4cdd-93a7-c2085d6a5bc1"
+            });
+
+            window.appInsights = appInsights;
+            appInsights.trackPageView();
+        </script>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>@ViewBag.Title - My ASP.NET Application</title>
+        @Styles.Render("~/Content/css")
+        <!--This bundle was moved by the Telerik VS Extensions for compatibility reasons-->
+        @Scripts.Render("~/bundles/jquery")
+        <link href="http://cdn.kendostatic.com/2014.3.1119/styles/kendo.common.min.css" rel="stylesheet" type="text/css" />
+        <link href="http://cdn.kendostatic.com/2014.3.1119/styles/kendo.mobile.all.min.css" rel="stylesheet" type="text/css" />
+        <link href="http://cdn.kendostatic.com/2014.3.1119/styles/kendo.dataviz.min.css" rel="stylesheet" type="text/css" />
+        <link href="http://cdn.kendostatic.com/2014.3.1119/styles/kendo.default.min.css" rel="stylesheet" type="text/css" />
+        <link href="http://cdn.kendostatic.com/2014.3.1119/styles/kendo.dataviz.default.min.css" rel="stylesheet" type="text/css" />
+        @*<script src="http://cdn.kendostatic.com/2014.3.1119/js/jquery.min.js"></script>*@
+        <script src="http://cdn.kendostatic.com/2014.3.1119/js/jszip.min.js"></script>
+        <script src="http://cdn.kendostatic.com/2014.3.1119/js/kendo.all.min.js"></script>
+        <script src="http://cdn.kendostatic.com/2014.3.1119/js/kendo.aspnetmvc.min.js"></script>
+        <script src="@Url.Content("~/Scripts/kendo.modernizr.custom.js")"></script>
+    </head>
 <body>
     <!-- This menu is normally produced by a propriatory library called GenericMenus -->
     <div>
