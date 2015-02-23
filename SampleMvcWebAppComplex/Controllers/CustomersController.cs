@@ -7,6 +7,7 @@
 // =====================================================
 #endregion
 
+using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Web.Mvc;
@@ -20,6 +21,8 @@ using ServiceLayer.CustomerServices.Support;
 
 namespace SampleMvcWebAppComplex.Controllers
 {
+    public enum PerformanceTypes { NotSet, Original, Version1, Version2 }
+
     public class CustomersController : Controller
     {
         // GET: Customer
@@ -27,6 +30,26 @@ namespace SampleMvcWebAppComplex.Controllers
         public ActionResult Index()
         {
             return View(true);
+        }
+
+        /// <summary>
+        /// This is for testing the different optimisations of the Customer list
+        /// </summary>
+        /// <param name="type">should be either Original, Version1 or Version2 </param>
+        /// <returns></returns>
+        public ActionResult CustomerPerf(string type)
+        {
+
+            var perfType = PerformanceTypes.NotSet;
+            Enum.TryParse(type, true, out perfType);
+            if (Enum.TryParse(type, true, out perfType))
+                return View(perfType);
+
+            //otherwise the input didn't make sense
+            TempData["errorMessage"] = string.IsNullOrEmpty(type)
+                ? "You need to provide ?type=XXX, where XXX is Version1, Original or Version2"
+                : string.Format("You supplied the value '{0}', which wasn't Version1, Original or Version2", type);
+            return View(PerformanceTypes.Version1);
         }
 
         [DisplayName("Potential Customers")]
@@ -38,6 +61,18 @@ namespace SampleMvcWebAppComplex.Controllers
         public JsonResult IndexListRead([DataSourceRequest]DataSourceRequest request, IListService service)
         {
             var result = service.GetAll<ListCustomerDto>().OrderBy(x => x.CustomerID).ToDataSourceResult(request);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult IndexListReadOrg([DataSourceRequest]DataSourceRequest request, IListService service)
+        {
+            var result = service.GetAll<ListCustomerOrgDto>().OrderBy(x => x.CustomerID).ToDataSourceResult(request);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult IndexListReadVer2([DataSourceRequest]DataSourceRequest request, IListService service)
+        {
+            var result = service.GetAll<ListCustomerVer2Dto>().OrderBy(x => x.CustomerID).ToDataSourceResult(request);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

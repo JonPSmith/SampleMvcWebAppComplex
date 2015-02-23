@@ -78,6 +78,8 @@
     <Compile Include="CustomerServices\CrudCustomerAddressDto.cs" />
     <Compile Include="CustomerServices\CrudCustomerDto.cs" />
     <Compile Include="CustomerServices\ListCustomerAddressDto.cs" />
+    <Compile Include="CustomerServices\ListCustomerVer2Dto.cs" />
+    <Compile Include="CustomerServices\ListCustomerOrgDto.cs" />
     <Compile Include="CustomerServices\ListCustomerDto.cs" />
     <Compile Include="CustomerServices\Support\DeleteHelpers.cs" />
     <Compile Include="OrdersServices\CreateLineItemDto.cs" />

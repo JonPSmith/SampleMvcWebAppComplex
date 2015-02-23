@@ -8,7 +8,9 @@
 #endregion
 
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using DataLayer.GeneratedEf;
+using GenericServices;
 using GenericServices.Core;
 
 namespace ServiceLayer.CustomerServices
@@ -49,17 +51,21 @@ namespace ServiceLayer.CustomerServices
 
         //The code below shows how to override ListQueryUntracked to achive what DelegateDecompiler and AutoMapper do automatically 
         //As you can see its not that hard, but if you needed to do this for every DTO it gets pertty boring!
+        //Note: this version uses the from ... in format as it allows the use of the 'let' statement, 
+        //which in this case, produces a better SQL query.
 
         //protected override IQueryable<ListCustomerDto> ListQueryUntracked(IGenericServicesDbContext context)
         //{
-        //    return context.Set<Customer>().Select(x => new ListCustomerDto
-        //    {
-        //        CustomerID = x.CustomerID,
-        //        CompanyName = x.CompanyName,
-        //        FullName = x.Title + (x.Title == null ? "" : " ") + x.FirstName + " " + x.LastName + " " + x.Suffix,
-        //        HasBoughtBefore = x.SalesOrderHeaders.Any(),
-        //        TotalAllOrders = SalesOrderHeaders.Any() ? SalesOrderHeaders.Sum(x => x.TotalDue) : 0
-        //    });
+        //    return from x in context.Set<Customer>()
+        //        let hasBoughtBefore = x.SalesOrderHeaders.Any()
+        //        select new ListCustomerDto
+        //        {
+        //            CustomerID = x.CustomerID,
+        //            CompanyName = x.CompanyName,
+        //            FullName = x.Title + (x.Title == null ? "" : " ") + x.FirstName + " " + x.LastName + " " + x.Suffix,
+        //            HasBoughtBefore = hasBoughtBefore,
+        //            TotalAllOrders = hasBoughtBefore ? x.SalesOrderHeaders.Sum(y => y.TotalDue) : 0
+        //        };
         //}
 
         //If you have read the article https://www.simple-talk.com/dotnet/asp.net/using-entity-framework-with-an-existing-database--user-interface/

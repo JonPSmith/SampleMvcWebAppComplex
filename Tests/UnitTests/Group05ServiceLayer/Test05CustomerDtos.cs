@@ -71,8 +71,53 @@ namespace Tests.UnitTests.Group05ServiceLayer
             }
         }
 
+
         [Test]
-        public void Test05DetailCrudCustomersViaServiceHasSalesOrdersOk()
+        public void Test05ListCustomersPerformanceOrgOk()
+        {
+            using (var db = new AdventureWorksLt2012())
+            {
+                //SETUP
+                var service = new ListService(db);
+                var log = new List<string>();
+                db.Database.Log = log.Add;
+
+                //ATTEMPT
+                var query = service.GetAll<ListCustomerOrgDto>().Where(x => x.HasBoughtBefore);
+                var customers = query.ToList();
+
+                //VERIFY
+                customers.Count.ShouldBeGreaterThan(0);
+                customers[0].FullName.ShouldNotEqualNull();
+                customers.All(x => x.TotalAllOrders > 0).ShouldEqual(true);
+            }
+        }
+
+        [Test]
+        public void Test06ListCustomersPerformanceVer2Ok()
+        {
+            using (var db = new AdventureWorksLt2012())
+            {
+                //SETUP
+                var service = new ListService(db);
+                var log = new List<string>();
+                db.Database.Log = log.Add;
+
+                //ATTEMPT
+                var query = service.GetAll<ListCustomerVer2Dto>().Where(x => x.HasBoughtBefore);
+                var customers = query.ToList();
+
+                //VERIFY
+                customers.Count.ShouldBeGreaterThan(0);
+                customers[0].FullName.ShouldNotEqualNull();
+                customers.All(x => x.TotalAllOrders > 0).ShouldEqual(true);
+            }
+        }
+
+
+
+        [Test]
+        public void Test10DetailCrudCustomersViaServiceHasSalesOrdersOk()
         {
             using (var db = new AdventureWorksLt2012())
             {
@@ -92,7 +137,7 @@ namespace Tests.UnitTests.Group05ServiceLayer
 
 
         [Test]
-        public void Test06DetailCrudCustomersViaServiceAddressOk()
+        public void Test11DetailCrudCustomersViaServiceAddressOk()
         {
             using (var db = new AdventureWorksLt2012())
             {

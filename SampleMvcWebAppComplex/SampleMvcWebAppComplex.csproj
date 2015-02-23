@@ -276,6 +276,7 @@
     <Content Include="Views\Test\TestGridErrors.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DropDownListType.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\MultiSelectListType.cshtml" />
+    <Content Include="Views\Customers\CustomerPerf.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

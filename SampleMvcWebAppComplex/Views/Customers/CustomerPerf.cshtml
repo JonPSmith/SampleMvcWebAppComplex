@@ -1,0 +1,86 @@
+﻿@using SampleMvcWebAppComplex.Controllers
+@model PerformanceTypes
+@{
+    ViewBag.Title = "CustomerPerf";
+}
+
+<h2>Performance tests</h2>
+<p>
+    This view allows the testing of different versions of LINQ commands to be tested to see how long they take. 
+    The three types are listed below, with the particular one in this request marked with a =>
+</p>
+@helper  MarkThis(PerformanceTypes type)
+{
+    if (Model == type) { <text>=>&nbsp;</text> } else { <text>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</text> }
+}
+
+<ul>
+    <li>@MarkThis(PerformanceTypes.Original)<strong> Original</strong>: This was the original version, which is slow.</li>
+    <li>@MarkThis(PerformanceTypes.Version1)<strong> Version1</strong>: This is the improved version that is now used.</li>
+    <li>@MarkThis(PerformanceTypes.Version2)<strong> Version2</strong>: This is the second, more complicated, improvement using LINQ 'let'.</li>
+</ul>
+
+@Html.AntiForgeryToken()
+
+@(Html.Kendo().Grid<ServiceLayer.CustomerServices.ListCustomerDto>()
+    .Name("PrimaryKGrid")
+    .ToolBar(toolbar =>
+            {
+                toolbar.Template(@<text>
+                    <div class="toolbar">
+                        @Html.ActionLink("Create new Customer", "Create", null, new { @class = "k-button" })
+                    </div>
+                </text>);
+
+            })
+            .Columns(columns =>
+            {
+                columns.Bound(p => p.CompanyName);
+                columns.Bound(p => p.FullName).Title("Contact Name");
+                columns.Bound(p => p.TotalAllOrders).Format("{0:C}").Title("Total Sales Value");
+                columns.Bound(p => p.CustomerID).Title("").ClientTemplate(
+                    @Html.ActionLink("Detail", "Details", new { id = "#=CustomerID#" }, new { @class = "k-button" }).ToHtmlString() + " " +
+                    @Html.ActionLink("Edit", "Edit", new { id = "#=CustomerID#" }, new { @class = "k-button" }).ToHtmlString()).Filterable(false).Sortable(false).Width(160);
+                columns.Command(x => x.Destroy()).Width(100);
+            })
+            .Pageable(x => x.PageSizes(new int[] { 10, 20, 50, 100 }))
+            .Sortable()
+            .Filterable()
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .Model(model => model.Id(p => p.CustomerID))
+                .PageSize(10)
+                .Events(events =>
+                {
+                    events.Error("grids.errorHandler");
+                    events.RequestStart("grids.requestStart");
+                    events.RequestEnd("grids.requestEnd");
+                })
+                .Filter(filters =>filters.Add(c => c.HasBoughtBefore).IsEqualTo(true))
+                .Read(read =>
+                {
+                    switch (Model)
+                    {
+                        case PerformanceTypes.Original:
+                            read.Action("IndexListReadOrg", "Customers");
+                            break;
+                        case PerformanceTypes.Version1:
+                            read.Action("IndexListRead", "Customers");
+                            break;
+                        case PerformanceTypes.Version2:
+                            read.Action("IndexListReadVer2", "Customers");
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                })                  
+                .Destroy(x => x.Action("CustomerDelete", "Customers").Type(HttpVerbs.Post).Data("grids.sendAntiForgery"))
+                )
+)
+
+<script type="text/kendo-template" id="message">
+    <div class="k-widget k-tooltip k-tooltip-validation k-invalid-msg field-validation-error" style="margin: 0.5em; display: block; " data-for="#=field#" data-valmsg-for="#=field#" id="#=field#_validationMessage">
+        <span class="k-icon k-warning"> </span>#=message#<div class="k-callout k-callout-n"></div>
+    </div>
+</script>
+
