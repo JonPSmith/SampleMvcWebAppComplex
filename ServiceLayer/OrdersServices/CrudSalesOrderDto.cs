@@ -149,7 +149,7 @@ namespace ServiceLayer.OrdersServices
         }
 
         //Need to force Decompile as accesses Customer.FullName, which GenericServices does not spot
-        public override bool ForceNeedDecompile
+        protected override bool ForceNeedDecompile
         {
             get { return true; }
         }
