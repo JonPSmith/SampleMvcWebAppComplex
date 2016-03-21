@@ -88,10 +88,11 @@ namespace Tests.UnitTests.Group05ServiceLayer
                 var log = new List<string>();
                 var pageSize = 5;
                 var pageNumber = 0;
-                Mapper.CreateMap<Customer, TestListCustomerDto>().ForMember(d => d.TotalAllOrders,
-                    opt => opt.MapFrom(c => c.SalesOrderHeaders.Sum(x => (decimal?) x.TotalDue) ?? 0));
+                var config = new MapperConfiguration(cfg => cfg.CreateMap<Customer, TestListCustomerDto>()
+                    .ForMember(d => d.TotalAllOrders,
+                    opt => opt.MapFrom(c => c.SalesOrderHeaders.Sum(x => (decimal?) x.TotalDue) ?? 0)));
 
-                var custs = db.Customers.Project().To<TestListCustomerDto>().Decompile();
+                var custs = db.Customers.ProjectTo<TestListCustomerDto>(config).Decompile();
                 var filteredQuery = custs.Where(x => x.CompanyName.Contains("Bike") && x.TotalAllOrders > 0);
                 var pagedQuery = filteredQuery.OrderBy(x => x.CompanyName).Skip(pageSize * pageNumber).Take(pageSize);
 
